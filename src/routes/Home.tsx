@@ -12,11 +12,19 @@ const Home: React.FC = () => {
     const storedShowMovies = sessionStorage.getItem('showMovies');
     return storedShowMovies ? JSON.parse(storedShowMovies) : false;
   });
-
-  const [searchQuery, setSearchQuery] = useState(() => {
+  const [searchQuery, setSearchQuery] = useState<string>(() => {
     const storedSearchQuery = sessionStorage.getItem('searchQuery');
     return storedSearchQuery || '';
   });
+  const [resultsLimit, setResultsLimit] = useState<number>(10);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('showMovies') === null) {
+      // Set TV Shows tab as active by default when the app loads for the first time
+      setShowMovies(false);
+      sessionStorage.setItem('showMovies', JSON.stringify(false));
+    }
+  }, []);
 
   const { movies, tvShows, loading, error } = useSelector((state: RootState) => ({
     movies: state.movies.movies,
@@ -26,44 +34,53 @@ const Home: React.FC = () => {
   }));
 
   useEffect(() => {
-    if (sessionStorage.getItem('showMovies') === null) {
-      setShowMovies(false);
-    }
-  }, []);
-
-  useEffect(() => {
     sessionStorage.setItem('showMovies', JSON.stringify(showMovies));
   }, [showMovies]);
 
   useEffect(() => {
     if (showMovies) {
-      if (searchQuery.length >= 3) {
-        dispatch(searchMovies(searchQuery));
-      } else {
-        dispatch(fetchMovies());
-      }
+      dispatch(fetchMovies());
     } else {
-      if (searchQuery.length >= 3) {
-        dispatch(searchTVShows(searchQuery));
-      } else {
-        dispatch(fetchTVShows());
-      }
+      dispatch(fetchTVShows());
     }
-  }, [dispatch, showMovies, searchQuery]);
+  }, [dispatch, showMovies]);
 
   const handleMovieButtonClick = () => {
     setShowMovies(true);
+    setResultsLimit(10); // Reset results limit when switching between movies and TV shows
   };
 
   const handleTVShowButtonClick = () => {
     setShowMovies(false);
+    setResultsLimit(10); // Reset results limit when switching between movies and TV shows
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearchQuery(query);
-    sessionStorage.setItem('searchQuery', query);
+    sessionStorage.setItem('searchQuery', query); // Store search query in session storage
+    if (query.length >= 3) {
+      setResultsLimit(100); // Show more than 10 results when searching
+    } else {
+      setResultsLimit(10); // Reset results limit when search query is less than 3 characters
+    }
   };
+
+  useEffect(() => {
+    if (searchQuery.length >= 3) {
+      if (showMovies) {
+        dispatch(searchMovies(searchQuery));
+      } else {
+        dispatch(searchTVShows(searchQuery));
+      }
+    } else {
+      if (showMovies) {
+        dispatch(fetchMovies());
+      } else {
+        dispatch(fetchTVShows());
+      }
+    }
+  }, [dispatch, showMovies, searchQuery]);
 
   return (
     <div className='m-2 p-4 w-full'>
@@ -99,33 +116,18 @@ const Home: React.FC = () => {
       {error && <div>Error: {error}</div>}
       {!loading && !error && (
         <div className="mt-5 card-container grid grid-cols-2 gap-10">
-          {showMovies ? (
-            movies.map((movie) => (
-              <Link key={movie.id} to={`/movie/${movie.id}`}>
-                <div className="flex flex-col shadow-xl rounded-lg">
-                  <img 
-                    src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`} 
-                    alt={movie.title} 
-                    className='rounded-lg'
-                  />
-                  <p className='text-center p-4'>{movie.title}</p>
-                </div>
-              </Link>
-            ))
-          ) : (
-            tvShows.map((show) => (
-              <Link key={show.id} to={`/show/${show.id}`}>
-                <div className="flex flex-col shadow-xl rounded-lg">
-                  <img 
-                    src={`https://image.tmdb.org/t/p/w300${show.poster_path}`} 
-                    alt={show.name} 
-                    className='rounded-lg'
-                  />
-                  <p className='text-center p-4'>{show.name}</p>
-                </div>
-              </Link>
-            ))
-          )}
+          {(showMovies ? movies.slice(0, resultsLimit) : tvShows.slice(0, resultsLimit)).map((item) => (
+            <Link key={item.id} to={`/${showMovies ? 'movie' : 'show'}/${item.id}`}>
+              <div className="flex flex-col shadow-xl rounded-lg">
+                <img 
+                  src={`https://image.tmdb.org/t/p/w300${item.poster_path}`} 
+                  alt={showMovies ? item.title : item.name} 
+                  className='rounded-lg'
+                />
+                <p className='text-center p-4'>{showMovies ? item.title : item.name}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </div>

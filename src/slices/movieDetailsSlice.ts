@@ -40,7 +40,6 @@ export const fetchMovieDetails = createAsyncThunk(
       const movieData = movieResponse.data;
       const videosData = videosResponse.data;
 
-      // Merge movie data and videos data
       const mergedData: MovieDetails = {
         ...movieData,
         video: videosData,
@@ -66,7 +65,7 @@ const movieDetailsSlice = createSlice({
       .addCase(fetchMovieDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.movie = action.payload;
-        state.videos = action.payload.video; // Assuming videos are nested under 'video' key
+        state.videos = action.payload.video; 
         state.error = null;
       })
       .addCase(fetchMovieDetails.rejected, (state, action) => {

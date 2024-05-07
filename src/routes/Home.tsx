@@ -20,7 +20,6 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem('showMovies') === null) {
-      // Set TV Shows tab as active by default when the app loads for the first time
       setShowMovies(false);
       sessionStorage.setItem('showMovies', JSON.stringify(false));
     }
@@ -47,22 +46,22 @@ const Home: React.FC = () => {
 
   const handleMovieButtonClick = () => {
     setShowMovies(true);
-    setResultsLimit(10); // Reset results limit when switching between movies and TV shows
+    setResultsLimit(10); 
   };
 
   const handleTVShowButtonClick = () => {
     setShowMovies(false);
-    setResultsLimit(10); // Reset results limit when switching between movies and TV shows
+    setResultsLimit(10);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearchQuery(query);
-    sessionStorage.setItem('searchQuery', query); // Store search query in session storage
+    sessionStorage.setItem('searchQuery', query); 
     if (query.length >= 3) {
-      setResultsLimit(100); // Show more than 10 results when searching
+      setResultsLimit(100); 
     } else {
-      setResultsLimit(10); // Reset results limit when search query is less than 3 characters
+      setResultsLimit(10); 
     }
   };
 

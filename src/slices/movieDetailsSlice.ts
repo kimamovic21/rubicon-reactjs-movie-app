@@ -34,10 +34,8 @@ export const fetchMovieDetails = createAsyncThunk(
   'movieDetails/fetchMovieDetails',
   async (movieId: string, { rejectWithValue }) => {
     try {
-      const [movieResponse, videosResponse] = await Promise.all([
-        axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`),
-        axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}`)
-      ]);
+      const movieResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`);
+      const videosResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}`);
 
       const movieData = movieResponse.data;
       const videosData = videosResponse.data;
@@ -68,7 +66,7 @@ const movieDetailsSlice = createSlice({
       .addCase(fetchMovieDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.movie = action.payload;
-        state.videos = action.payload;
+        state.videos = action.payload.video; // Assuming videos are nested under 'video' key
         state.error = null;
       })
       .addCase(fetchMovieDetails.rejected, (state, action) => {

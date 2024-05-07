@@ -10,7 +10,7 @@ const Home: React.FC = () => {
 
   const [showMovies, setShowMovies] = useState<boolean>(() => {
     const storedShowMovies = sessionStorage.getItem('showMovies');
-    return storedShowMovies ? JSON.parse(storedShowMovies) : true;
+    return storedShowMovies ? JSON.parse(storedShowMovies) : false;
   });
 
   const [searchQuery, setSearchQuery] = useState(() => {
@@ -19,11 +19,17 @@ const Home: React.FC = () => {
   });
 
   const { movies, tvShows, loading, error } = useSelector((state: RootState) => ({
-    movies: state.movies.movies.slice(0, 10), 
-    tvShows: state.tvShows.tvShows.slice(0, 10), 
+    movies: state.movies.movies,
+    tvShows: state.tvShows.tvShows,
     loading: state.movies.loading || state.tvShows.loading,
     error: state.movies.error || state.tvShows.error,
   }));
+
+  useEffect(() => {
+    if (sessionStorage.getItem('showMovies') === null) {
+      setShowMovies(false);
+    }
+  }, []);
 
   useEffect(() => {
     sessionStorage.setItem('showMovies', JSON.stringify(showMovies));

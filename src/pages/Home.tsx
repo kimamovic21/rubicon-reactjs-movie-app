@@ -52,32 +52,32 @@ const Home: React.FC = () => {
     setResultsLimit(10);
   };
 
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
+      if (searchQuery.length >= 3) {
+        if (showMovies) {
+          dispatch(searchMovies(searchQuery));
+        } else {
+          dispatch(searchTVShows(searchQuery));
+        }
+      } else {
+        if (showMovies) {
+          dispatch(fetchMovies());
+        } else {
+          dispatch(fetchTVShows());
+        }
+      }
+    }, 1000); 
+
+    return () => clearTimeout(delaySearch); 
+  }, [dispatch, showMovies, searchQuery]);
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearchQuery(query);
     sessionStorage.setItem('searchQuery', query); 
-    if (query.length >= 3) {
-      setResultsLimit(100); 
-    } else {
-      setResultsLimit(10); 
-    }
+    setResultsLimit(query.length >= 3 ? 100 : 10); 
   };
-
-  useEffect(() => {
-    if (searchQuery.length >= 3) {
-      if (showMovies) {
-        dispatch(searchMovies(searchQuery));
-      } else {
-        dispatch(searchTVShows(searchQuery));
-      }
-    } else {
-      if (showMovies) {
-        dispatch(fetchMovies());
-      } else {
-        dispatch(fetchTVShows());
-      }
-    }
-  }, [dispatch, showMovies, searchQuery]);
 
   return (
     <div className='m-2 p-4 w-full'>

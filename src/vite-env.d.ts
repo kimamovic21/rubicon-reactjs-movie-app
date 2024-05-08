@@ -8,3 +8,13 @@ interface ImportMetaEnv {
 interface ImportMeta {
     readonly env: ImportMetaEnv
 }
+
+declare module '*.test.tsx' {
+  const component: any;
+  export default component;
+}
+
+declare module '*.spec.tsx' {
+  const component: any;
+  export default component;
+}

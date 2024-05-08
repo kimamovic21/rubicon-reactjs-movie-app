@@ -44,7 +44,7 @@ const showsSlice = createSlice({
 export const { fetchTVShowsStart, fetchTVShowsSuccess, fetchTVShowsFailure } = showsSlice.actions;
 
 
-export const fetchTVShows = (): AppThunk => async (dispatch) => {
+export const fetchTVShows = (): AppThunk<void> => async (dispatch) => {
   try {
     dispatch(fetchTVShowsStart());
     const options = {
@@ -66,7 +66,7 @@ export const fetchTVShows = (): AppThunk => async (dispatch) => {
   }
 };
 
-export const searchTVShows = (query: string): AppThunk => async (dispatch) => {
+export const searchTVShows = (query: string): AppThunk<void> => async (dispatch) => {
   try {
     dispatch(fetchTVShowsStart());
     const options = {

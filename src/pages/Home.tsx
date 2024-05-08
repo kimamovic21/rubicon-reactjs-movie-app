@@ -6,7 +6,7 @@ import { fetchMovies, searchMovies } from '../slices/moviesSlice';
 import { fetchTVShows, searchTVShows } from '../slices/showsSlice';
 
 const Home: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
   const [showMovies, setShowMovies] = useState<boolean>(() => {
     const storedShowMovies = sessionStorage.getItem('showMovies');
@@ -113,7 +113,7 @@ const Home: React.FC = () => {
       {error && <div>Error: {error}</div>}
       {!loading && !error && (
         <div className="mt-5 card-container grid sm:grid-cols-2 gap-10">
-          {(showMovies ? movies.slice(0, resultsLimit) : tvShows.slice(0, resultsLimit)).map((item) => (
+          {(showMovies ? movies.slice(0, resultsLimit) : tvShows.slice(0, resultsLimit)).map((item: any) => (
             <Link key={item.id} to={`/${showMovies ? 'movie' : 'show'}/${item.id}`}>
               <div className="flex flex-col shadow-xl rounded-lg">
                 <img 

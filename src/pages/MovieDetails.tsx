@@ -6,10 +6,10 @@ import { fetchMovieDetails } from '../slices/movieDetailsSlice';
 
 const MovieDetails: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    dispatch(fetchMovieDetails(movieId));
+    dispatch(fetchMovieDetails(movieId!));
   }, [dispatch, movieId]);
 
   const { movie, loading, error } = useSelector((state: RootState) => state.movieDetails);

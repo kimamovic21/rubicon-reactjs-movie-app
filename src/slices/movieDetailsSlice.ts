@@ -16,6 +16,10 @@ interface MovieDetails {
   video: { results: { key: string }[] };
 }
 
+interface MovieVideos {
+  results: { key: string }[];
+}
+
 interface MovieDetailsState {
   movie: MovieDetails | null;
   videos: MovieVideos | null;

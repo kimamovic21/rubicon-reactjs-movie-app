@@ -16,6 +16,10 @@ interface ShowDetails {
   videos: { results: { key: string }[] };
 }
 
+interface ShowVideos {
+  results: { key: string }[];
+}
+
 interface ShowDetailsState {
   show: ShowDetails | null;
   videos: ShowVideos | null;

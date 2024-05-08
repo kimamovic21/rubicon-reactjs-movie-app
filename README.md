@@ -5,8 +5,11 @@ In order to start up the project you need to have Node installed
 
 ## Setup
 1. Add .env file (Example variables are stored in .env.example file)
-2. npm install
-3. npm run dev
+2. npm install (Command to install dependencies)
+3. npm run dev (Command to run server)
+
+## Test
+1. npm run test (Command to test application)
 
 
 ## React + TypeScript + Vite

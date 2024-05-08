@@ -43,7 +43,7 @@ const moviesSlice = createSlice({
 
 export const { fetchMoviesStart, fetchMoviesSuccess, fetchMoviesFailure } = moviesSlice.actions;
 
-export const fetchMovies = (): AppThunk => async (dispatch) => {
+export const fetchMovies = (): AppThunk<void> => async (dispatch) => {
   try {
     dispatch(fetchMoviesStart());
     const options = {
@@ -66,7 +66,7 @@ export const fetchMovies = (): AppThunk => async (dispatch) => {
   }
 };
 
-export const searchMovies = (query: string): AppThunk => async (dispatch) => {
+export const searchMovies = (query: string): AppThunk<void> => async (dispatch) => {
   try {
     dispatch(fetchMoviesStart());
     const options = {

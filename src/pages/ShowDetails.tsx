@@ -6,10 +6,10 @@ import { fetchShowDetails } from '../slices/showDetailsSlice';
 
 const ShowDetails: React.FC = () => {
   const { showId } = useParams<{ showId: string }>();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    dispatch(fetchShowDetails(showId)); 
+    dispatch(fetchShowDetails(showId!)); 
   }, [dispatch, showId]);
 
   const { show, loading, error } = useSelector((state: RootState) => state.showDetails); 

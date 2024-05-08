@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 
-import Home from './routes/Home';
-import MovieDetails from './routes/MovieDetails';
-import ShowDetails from './routes/ShowDetails';
+import Home from './pages/Home';
+import MovieDetails from './pages/MovieDetails';
+import ShowDetails from './pages/ShowDetails';
 
 // const API_KEY = import.meta.env.VITE_API_KEY; 
 // const API_TOKEN = import.meta.env.VITE_API_TOKEN; 

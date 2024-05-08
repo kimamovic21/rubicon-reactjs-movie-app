@@ -25,12 +25,10 @@ const Home: React.FC = () => {
     }
   }, []);
 
-  const { movies, tvShows, loading, error } = useSelector((state: RootState) => ({
-    movies: state.movies.movies,
-    tvShows: state.tvShows.tvShows,
-    loading: state.movies.loading || state.tvShows.loading,
-    error: state.movies.error || state.tvShows.error,
-  }));
+  const movies = useSelector((state: RootState) => state.movies.movies);
+  const tvShows = useSelector((state: RootState) => state.tvShows.tvShows);
+  const loading = useSelector((state: RootState) => state.movies.loading || state.tvShows.loading);
+  const error = useSelector((state: RootState) => state.movies.error || state.tvShows.error);
 
   useEffect(() => {
     sessionStorage.setItem('showMovies', JSON.stringify(showMovies));
@@ -114,7 +112,7 @@ const Home: React.FC = () => {
       {loading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
       {!loading && !error && (
-        <div className="mt-5 card-container grid grid-cols-2 gap-10">
+        <div className="mt-5 card-container grid sm:grid-cols-2 gap-10">
           {(showMovies ? movies.slice(0, resultsLimit) : tvShows.slice(0, resultsLimit)).map((item) => (
             <Link key={item.id} to={`/${showMovies ? 'movie' : 'show'}/${item.id}`}>
               <div className="flex flex-col shadow-xl rounded-lg">

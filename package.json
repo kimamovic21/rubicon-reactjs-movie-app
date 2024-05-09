@@ -1,5 +1,6 @@
 {
   "name": "rubicon-reactjs-movie-app",
+  "homepage": "https://rubicon-movies-tvshows-app.netlify.app/",
   "private": true,
   "version": "0.0.0",
   "type": "module",

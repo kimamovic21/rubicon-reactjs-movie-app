@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { RootState } from "../redux/store";
+import { useDebounce } from "use-debounce";
 import { useDispatch, useSelector } from "react-redux";
+
+import { RootState } from "../redux/store";
 import { fetchMovies, searchMovies } from "../slices/moviesSlice";
 import { fetchTVShows, searchTVShows } from "../slices/showsSlice";
 
@@ -28,10 +30,10 @@ const Home: React.FC = () => {
   const movies = useSelector((state: RootState) => state.movies.movies);
   const tvShows = useSelector((state: RootState) => state.tvShows.tvShows);
   const loading = useSelector(
-    (state: RootState) => state.movies.loading || state.tvShows.loading,
+    (state: RootState) => state.movies.loading || state.tvShows.loading
   );
   const error = useSelector(
-    (state: RootState) => state.movies.error || state.tvShows.error,
+    (state: RootState) => state.movies.error || state.tvShows.error
   );
 
   useEffect(() => {
@@ -56,27 +58,27 @@ const Home: React.FC = () => {
     setResultsLimit(10);
   };
 
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 1000);
+
   useEffect(() => {
-    const delaySearch = setTimeout(() => {
-      if (searchQuery.length >= 3) {
-        if (showMovies) {
-          dispatch(searchMovies(searchQuery));
-        } else {
-          dispatch(searchTVShows(searchQuery));
-        }
+    if (debouncedSearchQuery.length >= 3) {
+      if (showMovies) {
+        dispatch(searchMovies(debouncedSearchQuery));
       } else {
-        if (showMovies) {
-          dispatch(fetchMovies());
-        } else {
-          dispatch(fetchTVShows());
-        }
+        dispatch(searchTVShows(debouncedSearchQuery));
       }
-    }, 1000);
+    } else {
+      if (showMovies) {
+        dispatch(fetchMovies());
+      } else {
+        dispatch(fetchTVShows());
+      }
+    }
+  }, [dispatch, showMovies, debouncedSearchQuery]);
 
-    return () => clearTimeout(delaySearch);
-  }, [dispatch, showMovies, searchQuery]);
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const query = event.target.value;
     setSearchQuery(query);
     sessionStorage.setItem("searchQuery", query);

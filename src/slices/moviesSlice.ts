@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from '../redux/store';
 import axios from 'axios';
+
+import { AppThunk } from '../redux/store';
 
 const API_KEY = import.meta.env.VITE_API_KEY; 
 const API_TOKEN = import.meta.env.VITE_API_TOKEN; 

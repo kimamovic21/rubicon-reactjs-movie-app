@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import YouTube from "react-youtube";
 
 import { RootState } from "../redux/store";
 import { fetchShowDetails } from "../slices/showDetailsSlice";
@@ -30,12 +31,10 @@ const ShowDetails: React.FC = () => {
 
       <div className="mt-5">
         {show.videos && show.videos.results.length > 0 ? (
-          <div className="embed-responsive">
-            <iframe
-              title="Trailer"
-              src={`https://www.youtube.com/embed/${show.videos.results[0].key}`}
-              allowFullScreen
-              className="h-96 w-full"
+          <div className="p-5">
+            <YouTube
+              videoId={show.videos.results[0].key}
+              opts={{ width: "100%" }}
             />
           </div>
         ) : (
